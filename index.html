@@ -19,12 +19,48 @@
     </style>
   </head>
   <body>
+
+    <!-- Display the collection of repositories inside the results div. Include repository name, description, and a link to the HTML URL. Also include repository owner login, repository owner avatar as an image, and a link to the owner's profile page. Hint: Pay close attention to the structure of the search results! -->
+
+    <script id="repo-template" type="text/x-handlebars-template">
+      <ul>
+        {{#each items}}
+        <li>
+          <h2><a href="{{html_url}}">{{name}}</a></h2> - <a href="#" data-repository= {{name}} data-owner= {{owner.login}} onclick="showCommits(this)">Show Commits</a>
+          {{> userDetails owner}}
+          <p>Description: {{description}}</p>
+        </li>
+        {{/each}}
+      </ul>
+    </script>
+    <script id="commits-template" type="text/x-handlebars-template">
+      <ul>
+        {{#each this}}
+        <li>
+          <strong>{{sha}}</strong> - {{commit.message}}
+          {{> userDetails author}}
+        </li>
+        {{/each}}
+      </ul>
+    </script>
+    <script id="user-details-partial" type="text/x-handlebars-template">
+        <section>
+           <header><h4>Created By <a href="{{html_url}}">{{login}}</a></h4></header>
+           <img src="{{avatar_url}}" height="32" width="32">
+        </section>
+    </script>
     <main id="main">
       <div id="errors"></div>
     </main>
     <div class="flexbox-container">
       <div>
         <h3>Repositories</h3>
+        <div>
+          <form onsubmit="searchRepositories()">
+              <input type="text" id="searchTerms"><br>
+          </form>
+          <a href="#" onclick="searchRepositories()">Search Repositories</a>
+        </div>
         <div id="results"></div>
       </div>
       <div>
